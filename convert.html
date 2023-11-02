@@ -25,6 +25,7 @@ DEALINGS IN THE SOFTWARE.
         function onChange() {
             let i = document.getElementById('value').value;
             let val = Number.parseFloat(i)
+            let blockSize = Number.parseInt(document.getElementById('blocksize').value);
             document.getElementById('dec2hex').textContent = Number.parseInt(i).toString(16);
             document.getElementById('hex2dec').textContent = Number.parseInt(i, 16);
             document.getElementById('kib2kb').textContent = (val * 1.024).toFixed(3);
@@ -33,12 +34,21 @@ DEALINGS IN THE SOFTWARE.
             document.getElementById('mb2mib').textContent = (val / 1.048576).toFixed(6);
             document.getElementById('gib2gb').textContent = (val * 1.073741824).toFixed(9);
             document.getElementById('gb2gib').textContent = (val / 1.073741824).toFixed(9);
-            document.getElementById('block2byte').textContent = (val * 512);
-            document.getElementById('block2kib').textContent = (val / 2);
-            document.getElementById('block2mib').textContent = (val / 2048).toFixed(6);
-            document.getElementById('byte2block').textContent = (val / 512);
-            document.getElementById('kib2block').textContent = (val * 2);
-            document.getElementById('mib2block').textContent = (val * 2048);
+            document.getElementById('block2byte').textContent = (val * blockSize);
+            document.getElementById('block2kib').textContent = (val * blockSize / 1024);
+            document.getElementById('block2mib').textContent = (val * blockSize / (1024*1024)).toFixed(6);
+            document.getElementById('byte2block').textContent = (val / blockSize);
+            document.getElementById('kib2block').textContent = (val * 1024 / blockSize);
+            document.getElementById('mib2block').textContent = (val * 1024 * 1024 / blockSize);
+            let t = val => {
+                try {
+                    return new Date(val).toISOString()
+                } catch {
+                    return ""
+                }
+            }
+            document.getElementById('unix2date').textContent = t(val*1000);
+            document.getElementById('nano2date').textContent = t(val/1000000.0);
         }
     </script>
     <style>
@@ -66,6 +76,9 @@ DEALINGS IN THE SOFTWARE.
     <tr><td>Blocks -> Bytes</td> <td id="block2byte"></td> <td class="left">Bytes -> Blocks</td>  <td id="byte2block"></td></tr>
     <tr><td>Blocks <-> KiB</td> <td id="block2kib"></td>   <td class="left">KiB -> Blocks</td>  <td id="kib2block"></td></tr>
     <tr><td>Blocks <-> MiB</td> <td id="block2mib"></td>   <td class="left">MiB -> Block</td>  <td id="mib2block"></td></tr>
+    <tr><td>Unix s -> Time</td> <td id="unix2date"></td></tr>
+    <tr><td>Unix ns -> Time</td> <td id="nano2date"></td></tr>
 </table>
+<div><label for="blocksize">Block size </label><input id="blocksize" oninput="onChange()" type="text" value="512"/> </div>
 </body>
 </html>
