@@ -34,6 +34,8 @@ DEALINGS IN THE SOFTWARE.
             document.getElementById('mb2mib').textContent = (val / 1.048576).toFixed(6);
             document.getElementById('gib2gb').textContent = (val * 1.073741824).toFixed(9);
             document.getElementById('gb2gib').textContent = (val / 1.073741824).toFixed(9);
+            document.getElementById('tib2tb').textContent = (val * 1.099511627776).toFixed(12);
+            document.getElementById('tb2tib').textContent = (val / 1.099511627776).toFixed(12);
             document.getElementById('block2byte').textContent = (val * blockSize);
             document.getElementById('block2kib').textContent = (val * blockSize / 1024);
             document.getElementById('block2mib').textContent = (val * blockSize / (1024*1024)).toFixed(6);
@@ -49,6 +51,22 @@ DEALINGS IN THE SOFTWARE.
             }
             document.getElementById('unix2date').textContent = t(val*1000);
             document.getElementById('nano2date').textContent = t(val/1000000.0);
+
+            let t0 = Date.parse("2020-01-01T"+document.getElementById("t0").value)
+            let t1 = Date.parse("2020-01-01T"+document.getElementById("t1").value)
+            let diff = t1-t0
+            if (diff === diff) {
+                let ms = ('' + diff % 1000).padStart(3, '0')
+                diff = Math.floor(diff / 1000)
+                let sec = ('' + (diff % 60)).padStart(2, '0')
+                diff = Math.floor(diff / 60)
+                let min = ('' + (diff % 60)).padStart(2, '0')
+                diff = Math.floor(diff / 60)
+                let hr = ('' + (diff % 60)).padStart(2, '0')
+                document.getElementById("timeresult").value = `${hr}:${min}:${sec}.${ms}`
+            } else {
+                document.getElementById("timeresult").value = ""
+            }
         }
     </script>
     <style>
@@ -67,18 +85,24 @@ DEALINGS IN THE SOFTWARE.
     </style>
 </head>
 <body>
-<div><input id="value" oninput="onChange()" type="text"/> </div>
+<div><input id="value" oninput="onChange()" type="text" value="1"/> </div>
 <table>
     <tr><td>Hex -> Dec</td> <td id="hex2dec"></td>         <td class="left">Dec -> Hex</td><td id="dec2hex"></td></tr>
     <tr><td>KiB -> KB</td> <td id="kib2kb"></td>           <td class="left">KB -> KiB</td><td id="kb2kib"></td></tr>
     <tr><td>MiB -> MB</td> <td id="mib2mb"></td>           <td class="left">MB -> MiB</td><td id="mb2mib"></td></tr>
     <tr><td>GiB -> GB</td> <td id="gib2gb"></td>           <td class="left">GB -> GiB</td><td id="gb2gib"></td></tr>
+    <tr><td>TiB -> TB</td> <td id="tib2tb"></td>           <td class="left">TB -> TiB</td><td id="tb2tib"></td></tr>
     <tr><td>Blocks -> Bytes</td> <td id="block2byte"></td> <td class="left">Bytes -> Blocks</td>  <td id="byte2block"></td></tr>
-    <tr><td>Blocks <-> KiB</td> <td id="block2kib"></td>   <td class="left">KiB -> Blocks</td>  <td id="kib2block"></td></tr>
-    <tr><td>Blocks <-> MiB</td> <td id="block2mib"></td>   <td class="left">MiB -> Block</td>  <td id="mib2block"></td></tr>
+    <tr><td>Blocks -> KiB</td> <td id="block2kib"></td>   <td class="left">KiB -> Blocks</td>  <td id="kib2block"></td></tr>
+    <tr><td>Blocks -> MiB</td> <td id="block2mib"></td>   <td class="left">MiB -> Block</td>  <td id="mib2block"></td></tr>
     <tr><td>Unix s -> Time</td> <td id="unix2date"></td></tr>
     <tr><td>Unix ns -> Time</td> <td id="nano2date"></td></tr>
 </table>
 <div><label for="blocksize">Block size </label><input id="blocksize" oninput="onChange()" type="text" value="512"/> </div>
+<div style="margin-top:20px" >
+    <input id="t0" oninput="onChange()" type="text" value="00:00:00"/> .. 
+    <input id="t1" oninput="onChange()" type="text" value="00:00:00"/> =
+    <input id="timeresult" readonly="true"></input>
+</div>
 </body>
 </html>
