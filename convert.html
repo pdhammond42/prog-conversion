@@ -50,6 +50,7 @@ DEALINGS IN THE SOFTWARE.
                 }
             }
             document.getElementById('unix2date').textContent = t(val*1000);
+            document.getElementById('ms2date').textContent = t(val);
             document.getElementById('nano2date').textContent = t(val/1000000.0);
 
             let t0 = Date.parse("2020-01-01T"+document.getElementById("t0").value)
@@ -96,6 +97,7 @@ DEALINGS IN THE SOFTWARE.
     <tr><td>Blocks -> KiB</td> <td id="block2kib"></td>   <td class="left">KiB -> Blocks</td>  <td id="kib2block"></td></tr>
     <tr><td>Blocks -> MiB</td> <td id="block2mib"></td>   <td class="left">MiB -> Block</td>  <td id="mib2block"></td></tr>
     <tr><td>Unix s -> Time</td> <td id="unix2date"></td></tr>
+    <tr><td>Unix ms (JS) -> Time</td> <td id="ms2date"></td></tr>
     <tr><td>Unix ns -> Time</td> <td id="nano2date"></td></tr>
 </table>
 <div><label for="blocksize">Block size </label><input id="blocksize" oninput="onChange()" type="text" value="512"/> </div>
