@@ -38,7 +38,7 @@ DEALINGS IN THE SOFTWARE.
             document.getElementById('b2tib').textContent = (val / 1099511627776).toFixed(12);
             document.getElementById('block2byte').textContent = (val * blockSize);
             document.getElementById('block2kib').textContent = (val * blockSize / 1024);
-            document.getElementById('block2mib').textContent = (val * blockSize / (1024*1024)).toFixed(6);
+            document.getElementById('block2mib').textContent = (val * blockSize / (1024 * 1024)).toFixed(6);
             document.getElementById('byte2block').textContent = (val / blockSize);
             document.getElementById('kib2block').textContent = (val * 1024 / blockSize);
             document.getElementById('mib2block').textContent = (val * 1024 * 1024 / blockSize);
@@ -46,16 +46,16 @@ DEALINGS IN THE SOFTWARE.
                 try {
                     return new Date(val).toISOString()
                 } catch {
-                    return ""
+                    return ''
                 }
             }
-            document.getElementById('unix2date').textContent = t(val*1000);
+            document.getElementById('unix2date').textContent = t(val * 1000);
             document.getElementById('ms2date').textContent = t(val);
-            document.getElementById('nano2date').textContent = t(val/1000000.0);
+            document.getElementById('nano2date').textContent = t(val / 1000000.0);
 
-            let t0 = Date.parse("2020-01-01T"+document.getElementById("t0").value)
-            let t1 = Date.parse("2020-01-01T"+document.getElementById("t1").value)
-            let diff = t1-t0
+            let t0 = Date.parse('2020-01-01T' + document.getElementById('t0').value)
+            let t1 = Date.parse('2020-01-01T' + document.getElementById('t1').value)
+            let diff = t1 - t0
             if (diff === diff) {
                 let ms = ('' + diff % 1000).padStart(3, '0')
                 diff = Math.floor(diff / 1000)
@@ -64,28 +64,27 @@ DEALINGS IN THE SOFTWARE.
                 let min = ('' + (diff % 60)).padStart(2, '0')
                 diff = Math.floor(diff / 60)
                 let hr = ('' + (diff % 60)).padStart(2, '0')
-                document.getElementById("timeresult").value = `${hr}:${min}:${sec}.${ms}`
+                document.getElementById('timeresult').value = `${hr}:${min}:${sec}.${ms}`
             } else {
-                document.getElementById("timeresult").value = ""
+                document.getElementById('timeresult').value = ''
             }
 
             const arr = []
             for (let j = 0; j < i.length; j += 2) {
-                arr.push(Number.parseInt(i.slice(j, j+2), 16))
+                arr.push(Number.parseInt(i.slice(j, j + 2), 16))
             }
             // Note that this is not UTF8, it's a nasty mix of 8 bit UTF16 code points.
             document.getElementById('hex2utf').textContent = String.fromCodePoint(...arr);
-            
-            if (arr.length === 4) {
-                document.getElementById('hex2float32').textContent = new Float32Array(new Uint8Array(arr).reverse().buffer)[0]
-            } else {
-                document.getElementById('hex2float32').textContent = '' 
-            }
 
-            if (arr.length === 8) {
-                document.getElementById('hex2float64').textContent = new Float64Array(new Uint8Array(arr).reverse().buffer)[0]
-            } else {
-                document.getElementById('hex2float64').textContent = ''
+            switch (i.length) {
+                case 8:
+                    document.getElementById('hex2float').textContent = new Float32Array(new Uint8Array(arr).reverse().buffer)[0]
+                    break
+                case 16:
+                    document.getElementById('hex2float').textContent = new Float64Array(new Uint8Array(arr).reverse().buffer)[0]
+                    break
+                default:
+                    document.getElementById('hex2float').textContent = ''
             }
         }
     </script>
@@ -96,35 +95,92 @@ DEALINGS IN THE SOFTWARE.
             font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 30px;
         }
+
         tr {
             line-height: 1.6;
         }
+
         td.left {
             padding-left: 40px;
         }
     </style>
 </head>
 <body>
-<div><input id="value" oninput="onChange()" type="text" value="1"/> </div>
+<div><input id="value" oninput="onChange()" type="text" value="1"/></div>
 <table>
-    <tr><td>Hex -> Dec</td> <td id="hex2dec"></td>         <td class="left">Dec -> Hex</td><td id="dec2hex"></td></tr>
-    <tr><td>KiB -> Bytes</td> <td id="kib2b"></td>           <td class="left">Bytes -> KiB</td><td id="b2kib"></td></tr>
-    <tr><td>MiB -> Bytes</td> <td id="mib2b"></td>           <td class="left">Bytes -> MiB</td><td id="b2mib"></td></tr>
-    <tr><td>GiB -> Bytes</td> <td id="gib2b"></td>           <td class="left">Bytes -> GiB</td><td id="b2gib"></td></tr>
-    <tr><td>TiB -> Bytes</td> <td id="tib2b"></td>           <td class="left">Bytes -> TiB</td><td id="b2tib"></td></tr>
-    <tr><td>Blocks -> Bytes</td> <td id="block2byte"></td> <td class="left">Bytes -> Blocks</td>  <td id="byte2block"></td></tr>
-    <tr><td>Blocks -> KiB</td> <td id="block2kib"></td>   <td class="left">KiB -> Blocks</td>  <td id="kib2block"></td></tr>
-    <tr><td>Blocks -> MiB</td> <td id="block2mib"></td>   <td class="left">MiB -> Block</td>  <td id="mib2block"></td></tr>
-    <tr><td>Unix s -> Time</td> <td id="unix2date"></td></tr>
-    <tr><td>Unix ms (JS) -> Time</td> <td id="ms2date"></td></tr>
-    <tr><td>Unix ns -> Time</td> <td id="nano2date"></td></tr>
-    <tr><td>Hex -> Text</td> <td id="hex2utf"></td></tr>
-    <tr><td>Hex -> Float32</td> <td id="hex2float32"></td></tr>
-    <tr><td>Hex -> Float64</td> <td id="hex2float64"></td></tr>
+    <tr>
+        <td>Hex -> Dec</td>
+        <td id="hex2dec"></td>
+        <td class="left">Dec -> Hex</td>
+        <td id="dec2hex"></td>
+    </tr>
+    <tr>
+        <td>KiB -> Bytes</td>
+        <td id="kib2b"></td>
+        <td class="left">Bytes -> KiB</td>
+        <td id="b2kib"></td>
+    </tr>
+    <tr>
+        <td>MiB -> Bytes</td>
+        <td id="mib2b"></td>
+        <td class="left">Bytes -> MiB</td>
+        <td id="b2mib"></td>
+    </tr>
+    <tr>
+        <td>GiB -> Bytes</td>
+        <td id="gib2b"></td>
+        <td class="left">Bytes -> GiB</td>
+        <td id="b2gib"></td>
+    </tr>
+    <tr>
+        <td>TiB -> Bytes</td>
+        <td id="tib2b"></td>
+        <td class="left">Bytes -> TiB</td>
+        <td id="b2tib"></td>
+    </tr>
+    <tr>
+        <td>Blocks -> Bytes</td>
+        <td id="block2byte"></td>
+        <td class="left">Bytes -> Blocks</td>
+        <td id="byte2block"></td>
+    </tr>
+    <tr>
+        <td>Blocks -> KiB</td>
+        <td id="block2kib"></td>
+        <td class="left">KiB -> Blocks</td>
+        <td id="kib2block"></td>
+    </tr>
+    <tr>
+        <td>Blocks -> MiB</td>
+        <td id="block2mib"></td>
+        <td class="left">MiB -> Block</td>
+        <td id="mib2block"></td>
+    </tr>
+    <tr>
+        <td>Unix s -> Time</td>
+        <td id="unix2date"></td>
+    </tr>
+    <tr>
+        <td>Unix ms (JS) -> Time</td>
+        <td id="ms2date"></td>
+    </tr>
+    <tr>
+        <td>Unix ns -> Time</td>
+        <td id="nano2date"></td>
+    </tr>
+    <tr>
+        <td>Hex -> Text</td>
+        <td id="hex2utf"></td>
+    </tr>
+    <tr>
+        <td>Hex -> Float</td>
+        <td id="hex2float"></td>
+    </tr>
 </table>
-<div><label for="blocksize">Block size </label><input id="blocksize" oninput="onChange()" type="text" value="512"/> </div>
-<div style="margin-top:20px" >
-    <input id="t0" oninput="onChange()" type="text" value="00:00:00"/> .. 
+<div><label for="blocksize">Block size </label><input id="blocksize" oninput="onChange()" type="text" value="512"/>
+</div>
+<div style="margin-top:20px">
+    <input id="t0" oninput="onChange()" type="text" value="00:00:00"/> ..
     <input id="t1" oninput="onChange()" type="text" value="00:00:00"/> =
     <input id="timeresult" readonly="true"></input>
 </div>
