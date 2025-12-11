@@ -52,6 +52,9 @@ DEALINGS IN THE SOFTWARE.
             document.getElementById('unix2date').textContent = t(val * 1000);
             document.getElementById('ms2date').textContent = t(val);
             document.getElementById('nano2date').textContent = t(val / 1000000.0);
+            document.getElementById('date2unix').textContent = (Date.parse(i) / 1000).toString()
+            document.getElementById('date2ms').textContent = (Date.parse(i)).toString()
+            document.getElementById('date2ns').textContent = (Date.parse(i) * 1000000).toString()
 
             let t0 = Date.parse('2020-01-01T' + document.getElementById('t0').value)
             let t1 = Date.parse('2020-01-01T' + document.getElementById('t1').value)
@@ -159,14 +162,20 @@ DEALINGS IN THE SOFTWARE.
     <tr>
         <td>Unix s -> Time</td>
         <td id="unix2date"></td>
+        <td class="left">Time -> Unix s</td>
+        <td id="date2unix"></td>
     </tr>
     <tr>
         <td>Unix ms (JS) -> Time</td>
         <td id="ms2date"></td>
+        <td class="left">Time -> Unix ms</td>
+        <td id="date2ms"></td>
     </tr>
     <tr>
         <td>Unix ns -> Time</td>
         <td id="nano2date"></td>
+        <td class="left">Time -> Unix s</td>
+        <td id="date2ns"></td>
     </tr>
     <tr>
         <td>Hex -> Text</td>
